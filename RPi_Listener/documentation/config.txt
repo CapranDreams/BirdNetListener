@@ -1,0 +1,24 @@
+{
+    "fs": 44100, 
+    "seconds": 30,
+    "buffer_size": 1024,
+
+    "output_dir": "recordings",
+    "server_dir": "C:/Users/server/BirdNET/birdnet/BirdNET_UI/data/wav/",
+
+    "location_name": "LocationName",
+    "latitude": 0,
+    "longitude": 0,
+
+    "ssh_host": "server.local",
+    "ssh_username": "username",
+    "ssh_password": "password"
+}
+
+
+
+set the server ssh credentials here.
+
+adjust latitude and longitude to your location.
+adjust the location name to your location.
+    IMPORTANT: the location name must not include any '~' characters.
