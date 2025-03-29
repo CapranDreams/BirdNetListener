@@ -4,13 +4,16 @@
     "buffer_size": 1024,
 
     "output_dir": "recordings",
-    "server_dir": "C:/Users/server/BirdNET/birdnet/BirdNET_UI/data/wav/",
+    "server_dir": "/path/to/wav/",
 
-    "location_name": "LocationName",
+    "location_name": "locationName",
     "latitude": 0,
     "longitude": 0,
 
     "ssh_host": "server.local",
     "ssh_username": "username",
-    "ssh_password": "password"
+    "ssh_password": "password",
+
+    "server_url": "https://xxxxxxxx.com/api/submit_wav",
+    "server_apikey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }

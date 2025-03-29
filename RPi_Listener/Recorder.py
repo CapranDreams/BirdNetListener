@@ -5,6 +5,7 @@ import datetime
 import os
 import paramiko
 import json
+import requests
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
@@ -58,12 +59,38 @@ def send_file_over_ssh(file_path):
         ssh.close()
     return is_ok
 
-# infinitely repeat: 
-#       a 30 second recording 
-#       save to a file 
-#       with the current date and time
-#       send that file over ssh to the server
-#       delete the file from this producer
+SERVER_URL = config['server_url']
+SERVER_APIKEY = config['server_apikey']
+def send_wav_to_server(file_path):
+    try:
+        # Open the file in binary mode
+        with open(file_path, 'rb') as file:
+            # Create a dictionary with the file
+            files = {'file': (os.path.basename(file_path), file, 'audio/wav')}
+            
+            # Set the API key in the headers
+            headers = {'X-API-Key': SERVER_APIKEY}
+            
+            # Make the POST request
+            response = requests.post(
+                f"{SERVER_URL}",
+                files=files,
+                headers=headers
+            )
+            
+            # Check if the request was successful
+            if response.status_code == 200:
+                print(f"  File successfully uploaded to server API: {os.path.basename(file_path)}")
+                return True
+            else:
+                print(f"  Failed to upload file to server API. Status code: {response.status_code}")
+                print(f"  Response: {response.text}")
+                return False
+                
+    except Exception as e:
+        print(f"  Error uploading file to server API: {e}")
+        return False
+    
 try:
     while True:
         try:
@@ -86,22 +113,19 @@ try:
             write(output_file, fs, myrecording_np)  # Save as WAV file
             print(f"Recording saved to {output_file}")
 
-            success = send_file_over_ssh(output_file)
-            if success:
-                print(f"  File sent to {ssh_username}@{ssh_host}")           
-                os.remove(output_file)
-                print(f"  File deleted: {output_file}")
-            else:
-                print(f"  File NOT sent to {ssh_username}@{ssh_host}")     
-                os.remove(output_file)
-                print(f"  File deleted anyways: {output_file}")
-                # for now, just delete the file to prevent accumulation
-                # TODO: send an email to the user maybe?
-                # TODO: try again until reconnection established?
+            # THIS METHOD IS FOR SENDING THE FILE OVER SSH
+            # ssh_success = send_file_over_ssh(output_file)
+
+            # THIS METHOD IS FOR SENDING THE FILE OVER THE WEB API
+            api_success = send_wav_to_server(output_file)
+            
+            # Delete the file after sending (or attempting to send)
+            os.remove(output_file)
+            print(f"  File deleted: {output_file}")
 
         except OSError as e:
             print(f"OSError: {e}")
-            break  # Exit the loop if an OSError occurs
+            # break  # Exit the loop if an OSError occurs
 
 except KeyboardInterrupt:
     print("KeyboardInterrupt")

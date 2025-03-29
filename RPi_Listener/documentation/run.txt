@@ -1,6 +1,0 @@
-SSH into the Raspberry Pi (from the same network)
-    ssh username@hostname.local
-
-Run the script
-    
-

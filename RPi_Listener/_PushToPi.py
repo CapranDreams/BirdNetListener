@@ -14,9 +14,9 @@ destination_dir = "/home/rpimic/RPi_Listener"
 
 # SSH credentials
 load_dotenv()  # Load environment variables from .env file
-ssh_host = os.getenv("ssh_host_mic")
-ssh_username = os.getenv("ssh_username_mic")
-ssh_password = os.getenv("ssh_password_mic")
+ssh_host = os.getenv("ssh_host")
+ssh_username = os.getenv("ssh_username")
+ssh_password = os.getenv("ssh_password")
 
 
 # get the parent directory
